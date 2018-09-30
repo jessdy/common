@@ -4,6 +4,7 @@ import me.hao0.common.exception.XmlException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,7 +40,12 @@ public class XmlReaders {
     public static XmlReaders create(InputStream inputStream){
         XmlReaders readers = new XmlReaders();
         try {
-            readers.document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+            DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+            df.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            df.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            DocumentBuilder builder = df.newDocumentBuilder();
+            
+            readers.document = builder.parse(inputStream);
         } catch (Exception e) {
             throw new XmlException("Xmls create fail", e);
         }
